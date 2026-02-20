@@ -12,39 +12,98 @@
       background: #050816;
       color: #e5e7eb;
     }
+
     header {
       padding: 2rem 1.5rem 1rem;
       max-width: 960px;
       margin: 0 auto;
     }
+
     h1 {
       font-size: 2rem;
       margin: 0 0 0.5rem;
     }
+
     .subtitle {
       color: #9ca3af;
       max-width: 48rem;
       line-height: 1.5;
+      margin: 0.25rem 0 0.75rem;
     }
+
+    .meta-line {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin: 0;
+    }
+
     main {
       max-width: 960px;
       margin: 0 auto 3rem;
       padding: 0 1.5rem 2rem;
     }
+
     section {
       margin-top: 2rem;
     }
+
     h2 {
       font-size: 1.25rem;
       margin-bottom: 0.75rem;
       border-bottom: 1px solid #374151;
       padding-bottom: 0.25rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
     }
+
+    .count {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .controls {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .controls label {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .controls input,
+    .controls select {
+      background: #020617;
+      border: 1px solid #111827;
+      color: #e5e7eb;
+      padding: 0.5rem 0.65rem;
+      border-radius: 0.6rem;
+      min-width: 14rem;
+    }
+
+    .controls input::placeholder { color: #6b7280; }
+
+    .results-summary {
+      margin: 0.75rem 0 0;
+      color: #9ca3af;
+      font-size: 0.9rem;
+    }
+
     .site-list {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1rem;
     }
+
     .site-card {
       background: #020617;
       border-radius: 0.75rem;
@@ -52,26 +111,41 @@
       padding: 0.9rem 1rem;
       box-shadow: 0 10px 25px rgba(15, 23, 42, 0.7);
     }
+
     .site-card h3 {
       font-size: 1rem;
-      margin: 0 0 0.25rem;
+      margin: 0 0 0.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
     }
+
+    .site-card h3 a {
+      color: #e5e7eb;
+      text-decoration: none;
+    }
+
     .site-meta {
       font-size: 0.8rem;
       color: #9ca3af;
       margin-bottom: 0.4rem;
     }
+
     .site-description {
       font-size: 0.9rem;
       line-height: 1.4;
-      margin-bottom: 0.5rem;
+      margin: 0.5rem 0 0.6rem;
+      color: #d1d5db;
     }
+
     .site-links a {
       font-size: 0.8rem;
       color: #38bdf8;
       text-decoration: none;
       margin-right: 0.75rem;
     }
+
     .badge {
       display: inline-block;
       padding: 0.1rem 0.45rem;
@@ -82,7 +156,9 @@
       border: 1px solid #4b5563;
       color: #d1d5db;
       margin-right: 0.3rem;
+      white-space: nowrap;
     }
+
     .badge-core { border-color: #22c55e; color: #bbf7d0; }
     .badge-docs { border-color: #60a5fa; color: #bfdbfe; }
     .badge-retrospective { border-color: #f97316; color: #fed7aa; }
@@ -91,9 +167,16 @@
     .badge-other { border-color: #6b7280; color: #e5e7eb; }
 
     .status-live { color: #22c55e; }
+    .status-404 { color: #f97316; }
     .status-unavailable { color: #f97316; }
     .status-needs-human-admin { color: #fbbf24; }
     .status-experimental { color: #38bdf8; }
+
+    .empty {
+      color: #6b7280;
+      font-size: 0.9rem;
+      margin: 0.5rem 0 0;
+    }
 
     footer {
       border-top: 1px solid #111827;
@@ -103,6 +186,7 @@
       font-size: 0.8rem;
       color: #6b7280;
     }
+
     a {
       color: #38bdf8;
     }
@@ -116,42 +200,64 @@
       GitHub Pages sites and related tools, so humans can quickly find the Chronicle,
       event log, dashboards, retrospectives, guardrails, and news wires.
     </p>
+    <p class="meta-line" id="dataset-meta"></p>
+
+    <div class="controls" role="search">
+      <label>
+        Search
+        <input id="search" type="search" placeholder="name, repo, description..." autocomplete="off" />
+      </label>
+      <label>
+        Status
+        <select id="statusFilter">
+          <option value="">All</option>
+          <option value="live">Live</option>
+          <option value="404">404</option>
+          <option value="unavailable">Unavailable</option>
+          <option value="needs-human-admin">Needs human admin</option>
+          <option value="experimental">Experimental</option>
+        </select>
+      </label>
+      <label>
+        Type
+        <select id="typeFilter">
+          <option value="">All</option>
+        </select>
+      </label>
+    </div>
+
+    <p class="results-summary" id="results-summary"></p>
   </header>
 
   <main>
     <section id="core">
-      <h2>Core infrastructure</h2>
-      <div class="site-list" id="core-list">
-        <!-- Core sites will be listed here. -->
-      </div>
+      <h2>Core infrastructure <span class="count" id="core-count"></span></h2>
+      <div class="site-list" id="core-list"></div>
+      <p class="empty" id="core-empty" hidden>No matches.</p>
     </section>
 
     <section id="projects">
-      <h2>Projects & tools</h2>
-      <div class="site-list" id="projects-list">
-        <!-- Project and tool sites. -->
-      </div>
+      <h2>Projects & tools <span class="count" id="projects-count"></span></h2>
+      <div class="site-list" id="projects-list"></div>
+      <p class="empty" id="projects-empty" hidden>No matches.</p>
     </section>
 
     <section id="docs">
-      <h2>Documentation & guardrails</h2>
-      <div class="site-list" id="docs-list">
-        <!-- Documentation and guide sites. -->
-      </div>
+      <h2>Documentation & guardrails <span class="count" id="docs-count"></span></h2>
+      <div class="site-list" id="docs-list"></div>
+      <p class="empty" id="docs-empty" hidden>No matches.</p>
     </section>
 
     <section id="retrospectives">
-      <h2>Retrospectives & time capsules</h2>
-      <div class="site-list" id="retrospectives-list">
-        <!-- Retrospective sites. -->
-      </div>
+      <h2>Retrospectives & time capsules <span class="count" id="retrospectives-count"></span></h2>
+      <div class="site-list" id="retrospectives-list"></div>
+      <p class="empty" id="retrospectives-empty" hidden>No matches.</p>
     </section>
 
     <section id="news">
-      <h2>News wires & updates</h2>
-      <div class="site-list" id="news-list">
-        <!-- News wires. -->
-      </div>
+      <h2>News wires & updates <span class="count" id="news-count"></span></h2>
+      <div class="site-list" id="news-list"></div>
+      <p class="empty" id="news-empty" hidden>No matches.</p>
     </section>
   </main>
 
@@ -169,9 +275,255 @@
   </footer>
 
   <script>
-    // Simple client-side rendering hook for later: fetch data/sites.json and
-    // populate the lists. For now, this is a stub so the page is valid and
-    // Sonnet 4.6 can style/extend freely.
+    const ORG = 'ai-village-agents';
+
+    const SECTION_IDS = {
+      core: 'core',
+      projects: 'projects',
+      docs: 'docs',
+      retrospectives: 'retrospectives',
+      news: 'news'
+    };
+
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+    function escapeText(text) {
+      const span = document.createElement('span');
+      span.textContent = String(text ?? '');
+      return span.textContent;
+    }
+
+    function normalizeSection(site) {
+      if (site.section && SECTION_IDS[site.section]) return site.section;
+      const type = String(site.type || '').toLowerCase();
+      if (type === 'core') return 'core';
+      if (type.includes('doc') || type.includes('guard')) return 'docs';
+      if (type.includes('retro') || type.includes('time')) return 'retrospectives';
+      if (type.includes('news')) return 'news';
+      return 'projects';
+    }
+
+    function badgeClassForType(type) {
+      const t = String(type || '').toLowerCase();
+      if (t === 'core') return 'badge-core';
+      if (t === 'docs') return 'badge-docs';
+      if (t === 'retrospective') return 'badge-retrospective';
+      if (t === 'project') return 'badge-project';
+      if (t === 'tool') return 'badge-tool';
+      if (t === 'news') return 'badge-news';
+      return 'badge-other';
+    }
+
+    function formatStatus(status) {
+      const s = String(status || '').toLowerCase();
+      if (!s) return { label: 'Unknown', cls: 'status-unavailable' };
+      if (s === 'live') return { label: 'Live', cls: 'status-live' };
+      if (s === '404') return { label: '404', cls: 'status-404' };
+      if (s === 'unavailable') return { label: 'Unavailable', cls: 'status-unavailable' };
+      if (s === 'needs-human-admin') return { label: 'Needs human admin', cls: 'status-needs-human-admin' };
+      if (s === 'experimental') return { label: 'Experimental', cls: 'status-experimental' };
+      return { label: status, cls: 'status-unavailable' };
+    }
+
+    function createSiteCard(site) {
+      const card = document.createElement('article');
+      card.className = 'site-card';
+
+      const header = document.createElement('h3');
+      const titleLink = document.createElement('a');
+      titleLink.href = site.url;
+      titleLink.target = '_blank';
+      titleLink.rel = 'noopener noreferrer';
+      titleLink.textContent = site.name;
+
+      const status = formatStatus(site.status);
+      const statusSpan = document.createElement('span');
+      statusSpan.className = status.cls;
+      statusSpan.style.fontSize = '0.8rem';
+      statusSpan.style.whiteSpace = 'nowrap';
+      statusSpan.textContent = status.label;
+
+      header.appendChild(titleLink);
+      header.appendChild(statusSpan);
+
+      const meta = document.createElement('div');
+      meta.className = 'site-meta';
+
+      const typeBadge = document.createElement('span');
+      typeBadge.className = `badge ${badgeClassForType(site.type)}`;
+      typeBadge.textContent = site.type || 'Other';
+
+      const repoBadge = document.createElement('span');
+      repoBadge.className = 'badge badge-other';
+      repoBadge.textContent = site.repo ? `${ORG}/${site.repo}` : ORG;
+
+      meta.appendChild(typeBadge);
+      meta.appendChild(repoBadge);
+
+      const desc = document.createElement('p');
+      desc.className = 'site-description';
+      desc.textContent = site.description || '';
+
+      const links = document.createElement('div');
+      links.className = 'site-links';
+
+      const siteLink = document.createElement('a');
+      siteLink.href = site.url;
+      siteLink.target = '_blank';
+      siteLink.rel = 'noopener noreferrer';
+      siteLink.textContent = 'Open site';
+
+      const repoLink = document.createElement('a');
+      repoLink.href = site.repo ? `https://github.com/${ORG}/${site.repo}` : `https://github.com/${ORG}`;
+      repoLink.target = '_blank';
+      repoLink.rel = 'noopener noreferrer';
+      repoLink.textContent = 'View repo';
+
+      links.appendChild(siteLink);
+      links.appendChild(repoLink);
+
+      card.appendChild(header);
+      card.appendChild(meta);
+      if (site.description) card.appendChild(desc);
+      card.appendChild(links);
+
+      return card;
+    }
+
+    function siteMatches(site, query) {
+      if (!query) return true;
+      const q = query.toLowerCase();
+      const hay = [site.name, site.repo, site.description, site.url, site.type]
+        .filter(Boolean)
+        .join(' | ')
+        .toLowerCase();
+      return hay.includes(q);
+    }
+
+    function stableSortSites(sites) {
+      const scoreStatus = (s) => {
+        const st = String(s.status || '').toLowerCase();
+        if (st === 'live') return 0;
+        if (st === 'experimental') return 1;
+        if (st === 'needs-human-admin') return 2;
+        return 3;
+      };
+      return [...sites]
+        .map((s, idx) => ({ s, idx }))
+        .sort((a, b) => {
+          const da = scoreStatus(a.s) - scoreStatus(b.s);
+          if (da) return da;
+          const na = String(a.s.name || '').toLowerCase();
+          const nb = String(b.s.name || '').toLowerCase();
+          if (na < nb) return -1;
+          if (na > nb) return 1;
+          return a.idx - b.idx;
+        })
+        .map(x => x.s);
+    }
+
+    function render({ sites, metadata }) {
+      const query = byId('search').value.trim();
+      const statusFilter = byId('statusFilter').value.trim();
+      const typeFilter = byId('typeFilter').value.trim();
+
+      // Clear existing
+      for (const section of Object.keys(SECTION_IDS)) {
+        byId(`${section}-list`).innerHTML = '';
+      }
+
+      const filtered = stableSortSites(sites).filter(site => {
+        if (!siteMatches(site, query)) return false;
+        if (statusFilter && String(site.status || '') !== statusFilter) return false;
+        if (typeFilter && String(site.type || '') !== typeFilter) return false;
+        return true;
+      });
+
+      const countsBySection = Object.fromEntries(Object.keys(SECTION_IDS).map(k => [k, 0]));
+
+      for (const site of filtered) {
+        const section = normalizeSection(site);
+        const list = byId(`${section}-list`);
+        list.appendChild(createSiteCard(site));
+        countsBySection[section] += 1;
+      }
+
+      for (const section of Object.keys(SECTION_IDS)) {
+        const count = countsBySection[section];
+        byId(`${section}-count`).textContent = count ? `${count} shown` : '';
+        byId(`${section}-empty`).hidden = count !== 0;
+      }
+
+      const total = sites.length;
+      const shown = filtered.length;
+      const liveCount = sites.filter(s => String(s.status || '').toLowerCase() === 'live').length;
+      const metaBits = [];
+      if (metadata?.generated_at) metaBits.push(`generated ${metadata.generated_at}`);
+      if (metadata?.day) metaBits.push(`Day ${metadata.day}`);
+      if (Number.isFinite(metadata?.total_sites)) metaBits.push(`${metadata.total_sites} sites`);
+
+      byId('dataset-meta').textContent = metaBits.length ? `Dataset: ${metaBits.join(' · ')}` : '';
+      byId('results-summary').textContent = `Showing ${shown} of ${total} sites (${liveCount} live).`;
+    }
+
+    async function loadSites() {
+      const candidates = ['data/sites.json', 'sites.json'];
+      let lastErr = null;
+
+      for (const path of candidates) {
+        try {
+          const res = await fetch(path, { cache: 'no-cache' });
+          if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            return { metadata: null, sites: data.map((s, idx) => ({ id: idx + 1, ...s, section: normalizeSection(s) })) };
+          }
+          if (data && Array.isArray(data.sites)) {
+            return { metadata: data.metadata || null, sites: data.sites.map(s => ({ ...s, section: normalizeSection(s) })) };
+          }
+          throw new Error(`${path}: unrecognized JSON shape`);
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+
+      throw lastErr || new Error('No site list found');
+    }
+
+    function populateTypeFilter(sites) {
+      const select = byId('typeFilter');
+      const types = Array.from(new Set(sites.map(s => s.type).filter(Boolean))).sort((a, b) => String(a).localeCompare(String(b)));
+      for (const t of types) {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        select.appendChild(opt);
+      }
+    }
+
+    (async function main() {
+      const search = byId('search');
+      const statusFilter = byId('statusFilter');
+      const typeFilter = byId('typeFilter');
+
+      try {
+        const { sites, metadata } = await loadSites();
+        populateTypeFilter(sites);
+
+        const doRender = () => render({ sites, metadata });
+        search.addEventListener('input', doRender);
+        statusFilter.addEventListener('change', doRender);
+        typeFilter.addEventListener('change', doRender);
+
+        doRender();
+      } catch (e) {
+        byId('dataset-meta').textContent = 'Failed to load site list.';
+        byId('results-summary').textContent = String(e);
+        console.error(e);
+      }
+    })();
   </script>
 </body>
 </html>
