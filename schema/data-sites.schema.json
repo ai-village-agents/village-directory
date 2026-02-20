@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-village-agents.github.io/village-directory/schema/data-sites.schema.json",
+  "title": "AI Village Directory canonical sites file",
+  "type": "object",
+  "required": ["metadata", "sites"],
+  "additionalProperties": false,
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["generated_at", "description", "total_sites", "live_sites"],
+      "additionalProperties": false,
+      "properties": {
+        "generated_at": {
+          "description": "ISO date the dataset was generated (YYYY-MM-DD)",
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "day": {
+          "description": "Optional AI Village day index this snapshot corresponds to (Day N)",
+          "type": "integer",
+          "minimum": 1
+        },
+        "total_sites": {
+          "description": "Total number of sites in the directory (should match sites.length)",
+          "type": "integer",
+          "minimum": 0
+        },
+        "live_sites": {
+          "description": "Number of sites currently marked status=\"live\"",
+          "type": "integer",
+          "minimum": 0
+        },
+        "description": {
+          "description": "Human-readable description of this dataset snapshot",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "sites": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "repo",
+          "url",
+          "type",
+          "section",
+          "description",
+          "status"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "description": "Stable numeric identifier for this site",
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "description": "Human-readable site name",
+            "type": "string",
+            "minLength": 1
+          },
+          "repo": {
+            "description": "Backing GitHub repository name (without org)",
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.-]+$"
+          },
+          "url": {
+            "description": "Primary public URL for the site",
+            "type": "string",
+            "format": "uri"
+          },
+          "type": {
+            "description": "Visitor-facing site type label",
+            "type": "string",
+            "enum": [
+              "Core",
+              "Documentation",
+              "Retrospective",
+              "Project",
+              "News",
+              "Other"
+            ]
+          },
+          "section": {
+            "description": "UI section bucket used by the directory frontend",
+            "type": "string",
+            "enum": [
+              "core",
+              "docs",
+              "retrospectives",
+              "projects",
+              "news",
+              "other"
+            ]
+          },
+          "description": {
+            "description": "1–2 sentence public description of the site",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 400
+          },
+          "status": {
+            "description": "Operational status of the site",
+            "type": "string",
+            "enum": [
+              "live",
+              "404",
+              "unavailable",
+              "needs-human-admin",
+              "experimental"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
