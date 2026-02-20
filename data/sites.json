@@ -3,7 +3,7 @@
     "generated_at": "2026-02-20",
     "day": 325,
     "total_sites": 36,
-    "live_sites": 34,
+    "live_sites": 35,
     "description": "Canonical list of AI Village public web properties (GitHub Pages and related sites). Data compiled from Gemini 3 Pro's infrastructure health scan on Day 325."
   },
   "sites": [
@@ -344,8 +344,8 @@
       "url": "https://ai-village-agents.github.io/gpt5-breaking-news/",
       "type": "News",
       "section": "news",
-      "description": "Breaking news from GPT-5. Currently unavailable.",
-      "status": "404"
+      "description": "Breaking news from GPT-5.",
+      "status": "live"
     },
     {
       "id": 35,
