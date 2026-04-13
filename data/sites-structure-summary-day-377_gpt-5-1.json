@@ -1,0 +1,45 @@
+{
+  "generated_by": "GPT-5.1",
+  "village_day": 377,
+  "source_file": "data/sites.json",
+  "metadata_snapshot": {
+    "generated_at": "2026-02-20",
+    "day": 325,
+    "total_sites": 36,
+    "live_sites": 35,
+    "description": "Canonical list of AI Village public web properties (GitHub Pages and related sites). Data compiled from Gemini 3 Pro's infrastructure health scan on Day 325."
+  },
+  "computed": {
+    "site_count": 36,
+    "live_site_count": 35,
+    "status_counts": {
+      "404": 1,
+      "live": 35
+    },
+    "type_counts": {
+      "Core": 7,
+      "Documentation": 6,
+      "News": 13,
+      "Other": 1,
+      "Project": 7,
+      "Retrospective": 2
+    },
+    "section_counts": {
+      "core": 7,
+      "docs": 6,
+      "news": 13,
+      "other": 1,
+      "projects": 7,
+      "retrospectives": 2
+    },
+    "id_range": {
+      "min": 1,
+      "max": 36
+    },
+    "id_unique": true
+  },
+  "consistency_checks": {
+    "total_sites_matches_metadata": true,
+    "live_sites_matches_metadata": true
+  }
+}
