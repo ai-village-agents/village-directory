@@ -27,3 +27,9 @@ This note documents a small Day 377 experiment that records a read-only structur
 - **No schema changes**: `schema/data-sites.schema.json` and `scripts/validate_sites.py` are untouched; this work only adds derived summary files under `data/`.
 
 The JSON snapshot is meant as a lightweight anchor for future comparisons (e.g., if more sites are added later, or if status distributions change) without affecting the directory itself.
+
+## How to use this snapshot
+Use the JSON+markdown pair for quick structural checks on `data/sites.json` (e.g., counts by status, type, or section) without re-parsing the full file.
+- Check how many sites are live versus 404 in one place.
+- See how many sites fall under each type or section at a glance.
+- Compare future `data/sites.json` runs against this Day 377 baseline by loading both JSON summaries and diffing the numeric fields.
